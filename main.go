@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
-
-	"github.com/gocarina/gocsv"
 )
 
 var shrts []*ShirtField
@@ -21,11 +21,7 @@ func readLine(prompt string) string {
 
 func main() {
 
-	var err error
-	file, err = os.OpenFile("db.csv", os.O_RDWR|os.O_CREATE, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
+	openFile()
 	defer file.Close()
 
 	cmd := readLine("Enter a command")
@@ -39,6 +35,12 @@ func main() {
 		doFunc = deleteShirt
 	case "add", "a":
 		doFunc = addShirt
+	case "location", "loc":
+		location := readLine("New Location")
+		doFunc = func() { setLocation(location) }
+	case "aloc", "alocation":
+		setAllLocations()
+		os.Exit(0)
 	}
 
 	for true {
@@ -48,6 +50,15 @@ func main() {
 	}
 }
 
+func openFile() {
+	var err error
+	file, err = os.OpenFile("db.json", os.O_RDWR|os.O_CREATE, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+
+}
+
 func readFile() {
 
 	shrts = []*ShirtField{}
@@ -55,22 +66,31 @@ func readFile() {
 		panic(err)
 	}
 
-	if err := gocsv.UnmarshalFile(file, &shrts); err != nil {
-		panic(err)
+	fileContents, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := json.Unmarshal(fileContents, &shrts); err != nil {
+		log.Fatal(err)
 	}
 
 }
 
 func writeFile() {
+
+	fileContents, err := json.MarshalIndent(&shrts, "", " ") // Use this to save the CSV back to the file
+	if err != nil {
+		panic(err)
+	}
+
 	if _, err := file.Seek(0, 0); err != nil { // Go to the start of the file
 		panic(err)
 	}
 
 	file.Truncate(1)
-	err := gocsv.MarshalFile(&shrts, file) // Use this to save the CSV back to the file
-	if err != nil {
-		panic(err)
-	}
+
+	file.Write(fileContents)
 	file.Sync()
 
 }

@@ -59,3 +59,32 @@ func deleteShirt() {
 	}
 	writeFile()
 }
+
+func setLocation(location string) {
+
+	shrtID := readLine("List Item ID")
+
+	// Replace shirt if exists
+
+	for i := range shrts {
+		if shrts[i].ID == shrtID {
+			shrts[i].Location = location
+			fmt.Printf("Set Location: %s\n", shrts[i])
+		}
+	}
+	writeFile()
+}
+
+func setAllLocations() {
+	oldLocation := readLine("Set all location from")
+	newLocation := readLine("Set all location to")
+
+	for i := range shrts {
+		if shrts[i].Location == oldLocation {
+			shrts[i].Location = newLocation
+			fmt.Printf("Relocated shirt %s", shrts[i])
+		}
+		writeFile()
+	}
+
+}
