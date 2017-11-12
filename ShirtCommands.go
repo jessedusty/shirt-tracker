@@ -81,8 +81,9 @@ func setAllLocations() {
 
 	for i := range shrts {
 		if shrts[i].Location == oldLocation {
+
 			shrts[i].Location = newLocation
-			fmt.Printf("Relocated shirt %s", shrts[i])
+			fmt.Printf("Relocated shirt %s\n", shrts[i])
 		}
 		writeFile()
 	}

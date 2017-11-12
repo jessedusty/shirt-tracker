@@ -39,6 +39,7 @@ func main() {
 		location := readLine("New Location")
 		doFunc = func() { setLocation(location) }
 	case "aloc", "alocation":
+		readFile()
 		setAllLocations()
 		os.Exit(0)
 	}
@@ -46,7 +47,6 @@ func main() {
 	for true {
 		readFile()
 		doFunc()
-
 	}
 }
 
