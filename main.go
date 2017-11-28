@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 )
 
 var shrts []*ShirtField
@@ -41,6 +42,19 @@ func main() {
 	case "aloc", "alocation":
 		readFile()
 		setAllLocations()
+		os.Exit(0)
+	case "retag":
+		readFile()
+		format := readLine("Shrt ID format ex shirt%d")
+		start, err := strconv.Atoi(readLine("Starting Index"))
+		if err != nil {
+			log.Fatal("Starting index invalid")
+		}
+		stop, err := strconv.Atoi(readLine("Stop at Index"))
+		if err != nil {
+			log.Fatal("Stop index invalid")
+		}
+		retagShirts(start, stop, format)
 		os.Exit(0)
 	}
 

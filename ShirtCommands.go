@@ -89,3 +89,36 @@ func setAllLocations() {
 	}
 
 }
+
+func retagShirts(start, stop int, format string) {
+	initial := start
+	end := stop
+	direction := 1
+
+	if initial > end {
+		direction = -1
+
+	}
+
+	for i := initial; true; i += direction {
+		oldShrtID := fmt.Sprintf(format, i)
+
+		var shrt *ShirtField
+		for i := range shrts {
+			if shrts[i].ID == oldShrtID {
+				shrt = shrts[i]
+			}
+		}
+		if shrt == nil {
+			fmt.Printf("shirt %s not found\n", oldShrtID)
+			return
+		}
+
+		fmt.Printf("Old Shirt - %s\n", shrt)
+		newShrtID := readLine("New shirt ID")
+		shrt.ID = newShrtID
+
+		fmt.Printf("Changed shirt ID from %s to %s - %s\n", oldShrtID, newShrtID, shrt)
+		writeFile()
+	}
+}
