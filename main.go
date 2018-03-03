@@ -34,6 +34,8 @@ func main() {
 		doFunc = listShirt
 	case "remove", "rm", "del", "delete":
 		doFunc = deleteShirt
+	case "use":
+		doFunc = useShirt
 	case "add", "a":
 		doFunc = addShirt
 	case "location", "loc":

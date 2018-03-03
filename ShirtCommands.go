@@ -60,6 +60,19 @@ func deleteShirt() {
 	writeFile()
 }
 
+func useShirt() {
+	shrtID := readLine("Use Item ID")
+
+	for i := range shrts {
+		if shrts[i].ID == shrtID {
+			fmt.Printf("Using shirt %s \n", shrts[i])
+			shrts[i].Location = "in use"
+			return
+		}
+	}
+	writeFile()
+}
+
 func setLocation(location string) {
 
 	shrtID := readLine("List Item ID")
